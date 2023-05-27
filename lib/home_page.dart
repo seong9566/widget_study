@@ -1,6 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,8 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //final ImageCard imageCard = ImageCard();
-
   final FontWeight fWeight = FontWeight.bold;
   final double fTitleSize = 24;
   final double fContentSize = 16;
@@ -21,6 +20,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> cachedImageWidgets = <Widget>[];
 
+  //List에 위젯을 추가
   void addContent(String imagePath, String text) {
     setState(
       () {
@@ -33,12 +33,11 @@ class _HomePageState extends State<HomePage> {
                   width: 150,
                   height: 200,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      imagePath,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        imagePath,
+                        fit: BoxFit.cover,
+                      )),
                 ),
                 Positioned(
                   bottom: 10,
@@ -59,51 +58,60 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> openDialog() async {
+  // Dialog
+  void openDialog() async {
+    final ImagePicker _picker = ImagePicker();
     final ImageProvider? image = await showDialog<ImageProvider>(
       context: context,
       builder: (BuildContext context) {
         String imagePath = '';
         String text = '';
 
-        return AlertDialog(
-          title: const Text('이미지와 텍스트 입력'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                onChanged: (value) {
-                  imagePath = value;
-                },
-                decoration: const InputDecoration(
-                  labelText: '이미지 경로',
-                ),
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: const Text('이미지와 텍스트 입력'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("이미지 경로 : ${imagePath}"),
+                  TextField(
+                    onChanged: (value) {
+                      text = value;
+                    },
+                    decoration: const InputDecoration(
+                      labelText: '설명글',
+                    ),
+                  ),
+                ],
               ),
-              TextField(
-                onChanged: (value) {
-                  text = value;
-                },
-                decoration: const InputDecoration(
-                  labelText: '텍스트',
+              actions: [
+                ElevatedButton(
+                  onPressed: () async {
+                    final XFile? imageFile =
+                        await _picker.pickImage(source: ImageSource.gallery);
+                    imagePath = imageFile?.path ?? '';
+                    Logger().d("선택 이미지 경로 : ${imagePath}");
+                    setState(() {});
+                  },
+                  child: const Text('이미지 추가'), // 이미지 추가 버튼
                 ),
-              ),
-            ],
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                addContent(imagePath, text);
-                Navigator.of(context).pop();
-              },
-              child: const Text('추가'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('취소'),
-            ),
-          ],
+                ElevatedButton(
+                  onPressed: () {
+                    addContent(imagePath, text);
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('추가'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('취소'),
+                ),
+              ],
+            );
+          },
         );
       },
     );
