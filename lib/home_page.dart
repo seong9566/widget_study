@@ -1,7 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace
 
-import 'package:d0t/image_card.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final ImageCard imageCard = ImageCard();
+  //final ImageCard imageCard = ImageCard();
 
   final FontWeight fWeight = FontWeight.bold;
   final double fTitleSize = 24;
@@ -19,7 +19,95 @@ class _HomePageState extends State<HomePage> {
   final double fHeight = 400;
   final double fWidth = 600;
 
-  final List<Widget> cachedImageWidgets = [];
+  final List<Widget> cachedImageWidgets = <Widget>[];
+
+  void addContent(String imagePath, String text) {
+    setState(
+      () {
+        cachedImageWidgets.add(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Stack(
+              children: [
+                Container(
+                  width: 150,
+                  height: 200,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset(
+                      imagePath,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 10,
+                  child: Text(
+                    text,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> openDialog() async {
+    final ImageProvider? image = await showDialog<ImageProvider>(
+      context: context,
+      builder: (BuildContext context) {
+        String imagePath = '';
+        String text = '';
+
+        return AlertDialog(
+          title: const Text('이미지와 텍스트 입력'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                onChanged: (value) {
+                  imagePath = value;
+                },
+                decoration: const InputDecoration(
+                  labelText: '이미지 경로',
+                ),
+              ),
+              TextField(
+                onChanged: (value) {
+                  text = value;
+                },
+                decoration: const InputDecoration(
+                  labelText: '텍스트',
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                addContent(imagePath, text);
+                Navigator.of(context).pop();
+              },
+              child: const Text('추가'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('취소'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +130,8 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Text(
                         "책임감이 강합니다.",
-                        style: TextStyle(fontWeight: fWeight, fontSize: fTitleSize),
+                        style: TextStyle(
+                            fontWeight: fWeight, fontSize: fTitleSize),
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 20),
@@ -60,7 +149,8 @@ class _HomePageState extends State<HomePage> {
               Stack(
                 children: [
                   Container(
-                    constraints: BoxConstraints(maxWidth: fWidth, maxHeight: fHeight),
+                    width: fWidth,
+                    height: fHeight,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -95,15 +185,14 @@ class _HomePageState extends State<HomePage> {
                   Positioned(
                     bottom: 16,
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
+                      //width: MediaQuery.of(context).size.width / 2,
+                      width: fWidth,
                       height: 200,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: imageCard.fContents.length,
+                        itemCount: cachedImageWidgets.length,
                         itemBuilder: (BuildContext context, int index) {
-                          if (cachedImageWidgets.length <= index) {
-                            cachedImageWidgets.add(imageCard.fContents[index]);
-                          }
+                          Logger().d("몇개가 있니? ${cachedImageWidgets.length}");
                           return cachedImageWidgets[index];
                         },
                       ),
@@ -112,7 +201,9 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  openDialog();
+                },
                 child: const Text("ImageCard 위젯 추가"),
               )
             ],

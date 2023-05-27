@@ -2,9 +2,6 @@
 
 import 'package:flutter/material.dart';
 
-const double fHeight = 1000;
-const double fWidth = 600;
-
 class ImageCard {
   final List<Widget> fContents = <Widget>[
     Padding(
@@ -26,7 +23,10 @@ class ImageCard {
               bottom: 10,
               child: Text(
                 "첫번째 배경사진",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               )),
         ],
       ),
@@ -50,7 +50,10 @@ class ImageCard {
               bottom: 10,
               child: Text(
                 "두번째 배경사진",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               )),
         ],
       ),
@@ -77,7 +80,10 @@ class ImageCard {
               bottom: 10,
               child: Text(
                 "세번째 배경사진",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               )),
         ],
       ),
@@ -101,7 +107,10 @@ class ImageCard {
               bottom: 10,
               child: Text(
                 "네번째 배경사진",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               )),
         ],
       ),
@@ -126,7 +135,10 @@ class ImageCard {
             bottom: 10,
             child: Text(
               "다섯번째 배경사진",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             )),
       ],
     ),
@@ -149,7 +161,38 @@ class ImageCard {
             bottom: 10,
             child: Text(
               "여섯번째 배경사진",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    ),
+    Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Stack(
+        children: [
+          SizedBox(
+            width: 150,
+            height: 200,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                "assets/image1.jpeg",
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          const Positioned(
+            bottom: 10,
+            child: Text(
+              "7번째 배경사진",
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
           ),
         ],
