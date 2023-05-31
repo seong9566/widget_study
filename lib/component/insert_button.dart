@@ -69,40 +69,41 @@ class _InsertWidget extends State<InsertWidget> {
 
   //TODO: 맵핑된 데이터만 넘어가야함. ex) title : "제목", content: "내용"
   void addContent(String imagePath, String text) {
-    // setState(
-    //   () {
-    //     listCardImages.add(
-    //       Padding(
-    //         padding: const EdgeInsets.all(8.0),
-    //         child: Stack(
-    //           children: [
-    //             SizedBox(
-    //               width: 150,
-    //               height: 200,
-    //               child: ClipRRect(
-    //                   borderRadius: BorderRadius.circular(10),
-    //                   child: Image.network(
-    //                     imagePath,
-    //                     fit: BoxFit.cover,
-    //                   )),
-    //             ),
-    //             Positioned(
-    //               bottom: 10,
-    //               child: Text(
-    //                 text,
-    //                 style: const TextStyle(
-    //                   fontSize: 16,
-    //                   fontWeight: FontWeight.bold,
-    //                   color: Colors.white,
-    //                 ),
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //     );
-    //   },
-    // );
+    setState(
+      () {
+        // listCardImages.add(
+        //   Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: Stack(
+        //       children: [
+        //         SizedBox(
+        //           // 사진의 크기
+        //           width: 150,
+        //           height: 200,
+        //           child: ClipRRect(
+        //               borderRadius: BorderRadius.circular(10),
+        //               child: Image.network(
+        //                 imagePath,
+        //                 fit: BoxFit.cover,
+        //               )),
+        //         ),
+        //         Positioned(
+        //           bottom: 10,
+        //           child: Text(
+        //             text,
+        //             style: const TextStyle(
+        //               fontSize: 16,
+        //               fontWeight: FontWeight.bold,
+        //               color: Colors.white,
+        //             ),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // );
+      },
+    );
   }
 
   @override

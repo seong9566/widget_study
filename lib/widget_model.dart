@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 
 /*
 TODO
@@ -119,23 +118,58 @@ class ListWidget extends StatefulWidget {
 }
 
 class _ListWidgetState extends State<ListWidget> {
-  final List<Widget> listCardImages = <Widget>[];
+  //final List<String> listCardImages = [];
+  Map<String, List<String>> listCardItems = {
+    "title": ["test1", "test2", "test3"],
+    "img": ["assets/image1.jpeg", "assets/image2.jpeg", "assets/image3.jpeg"],
+  };
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       // 변수화
-      //width: MediaQuery.of(context).size.width / 2,
-      width: fWidth,
+      width: fWidth, // 리스트 뷰의 크기
       height: 200,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: listCardImages.length,
+        itemCount: 3,
         itemBuilder: (BuildContext context, int index) {
-          Logger().d("ListView 실행?");
-          Logger().d("List: $listCardImages");
-          Logger().d("length: ${listCardImages.length}");
-          return listCardImages[index];
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Stack(
+              children: [
+                SizedBox(
+                  // 사진의 크기
+                  width: 150,
+                  height: 200,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    // child: Image.network(
+                    //   // listCardImages[index].imagePath,
+                    //   "blob:http://localhost:49626/a90b7a66-f05a-4957-b8d8-b804a2d088d0",
+                    //   fit: BoxFit.cover,
+                    // ),
+                    child: Image.asset(
+                      listCardItems["img"]![index].toString(),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 10,
+                  child: Text(
+                    //listCardImages[index].text,
+                    listCardItems["title"]![index].toString(),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
         },
       ),
     );
