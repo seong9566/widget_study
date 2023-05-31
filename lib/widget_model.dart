@@ -1,23 +1,34 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 /*
 TODO
+
+enum -> freezed 
 1. 위젯 분리
 2. 위젯 변수화
 3. 위젯 관리
 */
-class Widgets {
-  List<Widget> cachedImageWidgets = <Widget>[];
+final List<Widget> cachedImageWidgets = <Widget>[];
 
-  final FontWeight fWeight = FontWeight.bold;
-  final double fTitleSize = 24;
-  final double fContentSize = 16;
-  final double fHeight = 400;
-  final double fWidth = 600;
+const FontWeight fWeight = FontWeight.bold;
+const double fTitleSize = 24;
+const double fContentSize = 16;
+const double fHeight = 400;
+const double fWidth = 600;
 
-// function list
+class ContainerWidget extends StatefulWidget {
+  const ContainerWidget({super.key});
 
-  Widget containerWidget() {
+  @override
+  State<ContainerWidget> createState() => _ContainerWidgetState();
+}
+
+class _ContainerWidgetState extends State<ContainerWidget> {
+  @override
+  Widget build(BuildContext context) {
     return Container(
       width: fWidth,
       color: Colors.amber,
@@ -42,8 +53,20 @@ class Widgets {
       ),
     );
   }
+}
 
-  Widget stackWidget() {
+class StackWidget extends StatefulWidget {
+  const StackWidget({super.key});
+
+  @override
+  State<StackWidget> createState() => _StackWidgetState();
+}
+
+class _StackWidgetState extends State<StackWidget> {
+  // 나중에 Provider 사용시 필요 setState가 필요 없어짐, 상태값은 Provider로 관리 함.
+
+  @override
+  Widget build(BuildContext context) {
     return Stack(
       children: [
         SizedBox(
@@ -82,13 +105,23 @@ class Widgets {
         ),
         Positioned(
           bottom: 16,
-          child: listWidget(),
+          child: ListWidget(),
         ),
       ],
     );
   }
+}
 
-  Widget listWidget() {
+class ListWidget extends StatefulWidget {
+  const ListWidget({super.key});
+
+  @override
+  State<ListWidget> createState() => _ListWidgetState();
+}
+
+class _ListWidgetState extends State<ListWidget> {
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       // 변수화
       //width: MediaQuery.of(context).size.width / 2,
@@ -98,6 +131,9 @@ class Widgets {
         scrollDirection: Axis.horizontal,
         itemCount: cachedImageWidgets.length,
         itemBuilder: (BuildContext context, int index) {
+          Logger().d("ListView 실행?");
+          Logger().d("List: $cachedImageWidgets");
+          Logger().d("length: ${cachedImageWidgets.length}");
           return cachedImageWidgets[index];
         },
       ),
