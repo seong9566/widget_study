@@ -11,7 +11,6 @@ enum -> freezed
 2. 위젯 변수화
 3. 위젯 관리
 */
-final List<Widget> cachedImageWidgets = <Widget>[];
 
 const FontWeight fWeight = FontWeight.bold;
 const double fTitleSize = 24;
@@ -103,10 +102,10 @@ class _StackWidgetState extends State<StackWidget> {
             ],
           ),
         ),
-        Positioned(
-          bottom: 16,
-          child: ListWidget(),
-        ),
+        // Positioned(
+        //   bottom: 16,
+        //   child: ListWidget(),
+        // ),
       ],
     );
   }
@@ -120,6 +119,8 @@ class ListWidget extends StatefulWidget {
 }
 
 class _ListWidgetState extends State<ListWidget> {
+  final List<Widget> listCardImages = <Widget>[];
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -129,12 +130,12 @@ class _ListWidgetState extends State<ListWidget> {
       height: 200,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: cachedImageWidgets.length,
+        itemCount: listCardImages.length,
         itemBuilder: (BuildContext context, int index) {
           Logger().d("ListView 실행?");
-          Logger().d("List: $cachedImageWidgets");
-          Logger().d("length: ${cachedImageWidgets.length}");
-          return cachedImageWidgets[index];
+          Logger().d("List: $listCardImages");
+          Logger().d("length: ${listCardImages.length}");
+          return listCardImages[index];
         },
       ),
     );

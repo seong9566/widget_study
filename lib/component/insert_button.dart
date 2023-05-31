@@ -1,4 +1,3 @@
-import 'package:d0t/widget_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
@@ -7,10 +6,10 @@ class InsertWidget extends StatefulWidget {
   const InsertWidget({super.key});
 
   @override
-  State<InsertWidget> createState() => _nameState();
+  State<InsertWidget> createState() => _InsertWidget();
 }
 
-class _nameState extends State<InsertWidget> {
+class _InsertWidget extends State<InsertWidget> {
   void openDialog({required BuildContext context}) async {
     final ImagePicker picker = ImagePicker();
     final ImageProvider? image = await showDialog<ImageProvider>(
@@ -68,41 +67,42 @@ class _nameState extends State<InsertWidget> {
     );
   }
 
+  //TODO: 맵핑된 데이터만 넘어가야함. ex) title : "제목", content: "내용"
   void addContent(String imagePath, String text) {
-    setState(
-      () {
-        cachedImageWidgets.add(
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Stack(
-              children: [
-                SizedBox(
-                  width: 150,
-                  height: 200,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                        imagePath,
-                        fit: BoxFit.cover,
-                      )),
-                ),
-                Positioned(
-                  bottom: 10,
-                  child: Text(
-                    text,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+    // setState(
+    //   () {
+    //     listCardImages.add(
+    //       Padding(
+    //         padding: const EdgeInsets.all(8.0),
+    //         child: Stack(
+    //           children: [
+    //             SizedBox(
+    //               width: 150,
+    //               height: 200,
+    //               child: ClipRRect(
+    //                   borderRadius: BorderRadius.circular(10),
+    //                   child: Image.network(
+    //                     imagePath,
+    //                     fit: BoxFit.cover,
+    //                   )),
+    //             ),
+    //             Positioned(
+    //               bottom: 10,
+    //               child: Text(
+    //                 text,
+    //                 style: const TextStyle(
+    //                   fontSize: 16,
+    //                   fontWeight: FontWeight.bold,
+    //                   color: Colors.white,
+    //                 ),
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     );
+    //   },
+    // );
   }
 
   @override
