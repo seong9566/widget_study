@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 
+import 'widget_model.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -12,24 +14,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Widgets kWidgets = Widgets();
   final FontWeight fWeight = FontWeight.bold;
   final double fTitleSize = 24;
   final double fContentSize = 16;
   final double fHeight = 400;
   final double fWidth = 600;
 
-  final List<Widget> cachedImageWidgets = <Widget>[];
-
-  //List에 위젯을 추가
+// 나중에 Provider 사용시 필요 setState가 필요 없어짐, 상태값은 Provider로 관리 함.
   void addContent(String imagePath, String text) {
     setState(
       () {
-        cachedImageWidgets.add(
+        kWidgets.cachedImageWidgets.add(
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Stack(
               children: [
-                Container(
+                SizedBox(
                   width: 150,
                   height: 200,
                   child: ClipRRect(
@@ -58,9 +59,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Dialog
-  void openDialog() async {
-    final ImagePicker _picker = ImagePicker();
+  void openDialog({required BuildContext context}) async {
+    final ImagePicker picker = ImagePicker();
     final ImageProvider? image = await showDialog<ImageProvider>(
       context: context,
       builder: (BuildContext context) {
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("이미지 경로 : ${imagePath}"),
+                  Text("이미지 경로 : $imagePath"),
                   TextField(
                     onChanged: (value) {
                       text = value;
@@ -88,10 +88,9 @@ class _HomePageState extends State<HomePage> {
               actions: [
                 ElevatedButton(
                   onPressed: () async {
-                    final XFile? imageFile =
-                        await _picker.pickImage(source: ImageSource.gallery);
+                    final XFile? imageFile = await picker.pickImage(source: ImageSource.gallery);
                     imagePath = imageFile?.path ?? '';
-                    Logger().d("선택 이미지 경로 : ${imagePath}");
+                    Logger().d("선택 이미지 경로 : $imagePath");
                     setState(() {});
                   },
                   child: const Text('이미지 추가'), // 이미지 추가 버튼
@@ -129,88 +128,12 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 20),
-              Container(
-                width: fWidth,
-                color: Colors.amber,
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    children: [
-                      Text(
-                        "책임감이 강합니다.",
-                        style: TextStyle(
-                            fontWeight: fWeight, fontSize: fTitleSize),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        "책임감이 강한 사람은 자신이 맡은 일에 대해 책임을 지고 최선을 다하며, 어려움에 직면해도 꾸준히 노력하여 목표를 이루는 데 주도적인 역할을 합니다. 이러한 사람들은 신뢰와 예측 가능성을 제공하며, 주변 사람들에게는 안정감과 동기부여를 주는 존재입니다.",
-                        style: TextStyle(fontSize: fContentSize),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              kWidgets.containerWidget(),
               const SizedBox(height: 100),
-              Stack(
-                children: [
-                  Container(
-                    width: fWidth,
-                    height: fHeight,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Image.asset(
-                            "assets/profile.jpeg",
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        const SizedBox(width: 32),
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "홍길동",
-                                style: TextStyle(fontSize: fTitleSize),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                "조선대학교, 정보공학과",
-                                style: TextStyle(fontSize: fContentSize),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 16,
-                    child: SizedBox(
-                      //width: MediaQuery.of(context).size.width / 2,
-                      width: fWidth,
-                      height: 200,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: cachedImageWidgets.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          Logger().d("몇개가 있니? ${cachedImageWidgets.length}");
-                          return cachedImageWidgets[index];
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              kWidgets.stackWidget(),
               ElevatedButton(
                 onPressed: () {
-                  openDialog();
+                  openDialog(context: context);
                 },
                 child: const Text("ImageCard 위젯 추가"),
               )
