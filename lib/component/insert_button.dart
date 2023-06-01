@@ -1,3 +1,4 @@
+import 'package:d0t/home_page.dart';
 import 'package:d0t/widget_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,8 +14,10 @@ TODO:
  */
 
 class InsertWidget extends StatefulWidget {
-  InsertWidget({super.key});
-
+  InsertWidget({required this.widgetList, required this.onWidgetAdd, Key? key})
+      : super(key: key);
+  List<Widget>? widgetList;
+  final VoidCallback onWidgetAdd;
   @override
   State<InsertWidget> createState() => _InsertWidget();
 }
@@ -80,7 +83,6 @@ class _InsertWidget extends State<InsertWidget> {
     );
   }
 
-  //TODO: 맵핑된 데이터만 넘어가야함. ex) title : "제목", content: "내용"
   void addContent(String imagePath, String text) {
     setState(
       () {},
@@ -98,18 +100,21 @@ class _InsertWidget extends State<InsertWidget> {
   // }
   @override
   Widget build(BuildContext context) {
-    //List<Widget>? widgetList = [ContainerWidget(), StackWidget(), ListWidget()];
-    List<String> widgetList = <String>["Container", "Stack", "List"];
-
+    List<Widget> widgetList = widget.widgetList!;
+    //List<Widget>? dropDownButtonItems
+    // = [ContainerWidget(), StackWidget(), ListWidget()];
+    List<String> dropDownButtonItems = <String>["Container", "Stack", "List"];
     return ElevatedButton(
-      onPressed: () => _selectedWidget(context, widgetList),
+      onPressed: () =>
+          _selectedWidget(context, dropDownButtonItems, widgetList),
       child: const Text('위젯 추가'),
     );
   }
 
   // showDialog는 독립적인 context에서 위젯 트리를 생성한다 그러므로 부모의 setState는 적용이 되지않기때문에
   // StatefulBuilder를 사용해서 업데이트를 해주어야한다.
-  void _selectedWidget(BuildContext context, List<String> widgetList) {
+  void _selectedWidget(BuildContext context, List<String> dropDownButtonItems,
+      List<Widget> widgetList) {
     showDialog(
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
@@ -119,7 +124,8 @@ class _InsertWidget extends State<InsertWidget> {
                 // dropdown박스 구현하기.
                 content: DropdownButton(
                   value: _selectedValue,
-                  items: widgetList.map<DropdownMenuItem<String>>((value) {
+                  items: dropDownButtonItems
+                      .map<DropdownMenuItem<String>>((value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -138,7 +144,23 @@ class _InsertWidget extends State<InsertWidget> {
                     child: const Text('Cancel'),
                   ),
                   TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
+                    onPressed: () => {
+                      if (_selectedValue == "Container")
+                        {
+                          widgetList.add(ContainerWidget()),
+                        }
+                      else if (_selectedValue == "Stack")
+                        {
+                          widgetList.add(StackWidget()),
+                        }
+                      else
+                        {
+                          widgetList.add(ListWidget()),
+                        },
+                      Logger().d("위젯 확인 : ${widgetList.length}"),
+                      widget.onWidgetAdd(),
+                      Navigator.pop(context, 'OK'),
+                    },
                     child: const Text('OK'),
                   ),
                 ],
