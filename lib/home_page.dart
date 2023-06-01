@@ -35,52 +35,31 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Logger().d("위젯의 길이 확인 : ${widgetLists!.length}");
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         title: const Text("위젯 바인딩 테스트"),
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                ListView.builder(
-                  itemCount: widgetLists!.length,
-                  itemBuilder: ((context, index) {
-                    return widgetLists![index];
-                  }),
-                ),
-                InsertWidget(
-                  widgetList: widgetLists,
-                  onWidgetAdd: (() {
-                    setState(() {});
-                  }),
-                ),
-              ],
-            ),
-          ),
-          // child: Column(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [
-          //     const SizedBox(height: 20),
-          //     //kWidgets.containerWidget(),
-          //     widgetLists![0],
-          //     const SizedBox(height: 100),
-          //     //kWidgets.stackWidget(),
-          //     widgetLists![1],
-          //     const SizedBox(height: 20),
-          //     widgetLists![2],
-          //     const SizedBox(height: 20),
-
-          //     InsertWidget(
-          //       widgetList: widgetLists,
-          //       onWidgetAdd: (() {
-          //         setState(() {});
-          //       }),
-          //     ),
-          //   ],
-          // ),
+      body: Padding(
+        padding: const EdgeInsets.all(30.0),
+        child: ListView.builder(
+          itemCount: widgetLists!.length + 1,
+          itemBuilder: (context, index) {
+            if (index == widgetLists!.length) {
+              return InsertWidget(
+                widgetList: widgetLists,
+                onWidgetAdd: () {
+                  setState(() {});
+                },
+              );
+            } else {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: widgetLists![index],
+              );
+            }
+          },
         ),
       ),
     );
