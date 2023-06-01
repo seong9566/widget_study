@@ -17,7 +17,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    widgetList = <Widget>[ContainerWidget(), StackWidget(), ListWidget()];
+    widgetList = <Widget>[
+      ContainerWidget(),
+      StackWidget(),
+      ListWidget(),
+      // ContainerWidget() 얘가 동적으로 입력 되야함.
+    ];
   }
 
   final FontWeight fWeight = FontWeight.bold;
@@ -45,6 +50,7 @@ class _HomePageState extends State<HomePage> {
               widgetList![1],
               const SizedBox(height: 20),
               widgetList![2],
+
               InsertWidget(),
             ],
           ),

@@ -144,11 +144,6 @@ class _ListWidgetState extends State<ListWidget> {
                   height: 200,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    // child: Image.network(
-                    //   // listCardImages[index].imagePath,
-                    //   "blob:http://localhost:49626/a90b7a66-f05a-4957-b8d8-b804a2d088d0",
-                    //   fit: BoxFit.cover,
-                    // ),
                     child: Image.asset(
                       listCardItems["img"]![index].toString(),
                       fit: BoxFit.cover,
