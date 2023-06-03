@@ -5,12 +5,17 @@ import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 
 /*
-2023-06-01 
+2023-06-03
 TODO:
 1. dropdown버튼 구현
 2. 선택지로 ListWidget,StackWidget,ContainerWidget
 3. 선택 시 textfield로 setState로 입력 폼 구현
 4. 등록 버튼 시 화면에 생성
+
+각 함수의 역할
+openDialog : 이미지 카드를 추가하는 기능 (파일 선택)
+addContent(img, content만 넘겨주도록 수정 필요) : 이미지를 선택했을때 동적으로 그림을 다시 그려주고, List를 업데이트 하는 역할
+selectedWidget : 위젯을 선택 및 추가 
  */
 
 class InsertWidget extends StatefulWidget {
@@ -24,7 +29,7 @@ class InsertWidget extends StatefulWidget {
 
 class _InsertWidget extends State<InsertWidget> {
   String _selectedValue = 'Container';
-  // Container, StackWidget, ListWidget 세개가 선택 되어야함.
+
   void openDialog({required BuildContext context}) async {
     final ImagePicker picker = ImagePicker();
     final ImageProvider? image = await showDialog<ImageProvider>(
@@ -89,31 +94,9 @@ class _InsertWidget extends State<InsertWidget> {
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return ElevatedButton(
-  //     onPressed: () {
-  //       openDialog(context: context);
-  //     },
-  //     child: const Text("ImageCard 위젯 추가"),
-  //   );
-  // }
-  @override
-  Widget build(BuildContext context) {
-    List<Widget> widgetList = widget.widgetList!;
-    //List<Widget>? dropDownButtonItems
-    // = [ContainerWidget(), StackWidget(), ListWidget()];
-    List<String> dropDownButtonItems = <String>["Container", "Stack", "List"];
-    return ElevatedButton(
-      onPressed: () =>
-          _selectedWidget(context, dropDownButtonItems, widgetList),
-      child: const Text('위젯 추가'),
-    );
-  }
-
   // showDialog는 독립적인 context에서 위젯 트리를 생성한다 그러므로 부모의 setState는 적용이 되지않기때문에
   // StatefulBuilder를 사용해서 업데이트를 해주어야한다.
-  void _selectedWidget(BuildContext context, List<String> dropDownButtonItems,
+  void selectedWidget(BuildContext context, List<String> dropDownButtonItems,
       List<Widget> widgetList) {
     showDialog(
         context: context,
@@ -166,5 +149,15 @@ class _InsertWidget extends State<InsertWidget> {
                 ],
               );
             }));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> widgetList = widget.widgetList!;
+    List<String> dropDownButtonItems = <String>["Container", "Stack", "List"];
+    return ElevatedButton(
+      onPressed: () => selectedWidget(context, dropDownButtonItems, widgetList),
+      child: const Text('위젯 추가'),
+    );
   }
 }

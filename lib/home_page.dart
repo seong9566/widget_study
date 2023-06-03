@@ -35,8 +35,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Logger().d("위젯의 길이 확인 : ${widgetLists!.length}");
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         title: const Text("위젯 바인딩 테스트"),
